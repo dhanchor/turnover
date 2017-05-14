@@ -1,0 +1,73 @@
+
+<table id="turnover{{id}}"></table>
+<div id="tb{{id}}" style="padding:5px;">
+    <div style="margin-bottom: 5px">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="obj.add();">添加</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="obj.edit();">修改</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove"plain="true" onclick="obj.remove();">删除</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-save"plain="true" style="display: none" id="save{{id}}" onclick="obj.save();">保存</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-redo"plain="true" style="display: none" id="redo{{id}}" onclick="obj.redo();">取消编辑</a>
+    </div>
+</div>
+
+<script>
+
+$(function(){
+    $('#turnover{{id}}').datagrid({
+        url:'/get_patient_list',
+        fit : true,
+        fitColumns : true,
+        striped : true,
+        rownumbers : true,
+        border : false,
+        pagination : true,
+        pageSize : 20,
+        pageList : [10, 20, 30, 40, 50],
+        pageNumber : 1,
+        toolbar:'#tb{{id}}',
+        columns:[[
+            {
+                field:'bed_no',
+                title:'床号',
+                width:20,
+            },
+            {
+                field:'name',
+                title:'姓名',
+                width:30,
+            },
+            {
+                field:'sex',
+                title:'性别',
+                width:20,
+            },
+            {
+                field:'age',
+                title:'年龄',
+                width:20,
+            },
+            {
+                field:'inpatient_no',
+                title:'住院号',
+                width:20,
+            },
+            {
+                field:'admiss_diag_str',
+                title:'主要诊断',
+                width:100,
+            },
+            {
+                field:'shift_content',
+                title:'交班内容',
+                width:100,
+            },
+            {
+                field:'focus',
+                title:'重点关注内容',
+                width:100,
+            },  
+        ]],
+    });
+});
+
+</script>

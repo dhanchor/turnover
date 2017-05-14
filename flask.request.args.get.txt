@@ -1,0 +1,19 @@
+from flask import Flask,request
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return {"param":request.args.get('abc')}
+此时访问http://127.0.0.1:5000/?abc=hello将得到{"param": "hello"}
+
+如果是
+
+@app.route('/')
+def hello():
+    return request.args.items().__str__()
+访问http://127.0.0.1:5000/?abc=hello&xyz=world&ab=hellohello
+则得到[('abc', u'hello'), ('xyz', u'world'), ('ab', u'hellohello')]
+
+
+1
