@@ -76,7 +76,15 @@
 .icon-group{
 	background:url('icons/group.png') no-repeat center center;
 }
-
+.icon-add-new{
+	background:url('icons/add-new.png') no-repeat center center;
+}
+.icon-delete-new{
+	background:url('icons/delete-new.png') no-repeat center center;
+}
+.icon-edit-new{
+	background:url('icons/edit-new.png') no-repeat center center;
+}
 
 .icon-mini-add{
 	background:url('icons/mini_add.png') no-repeat center center;
