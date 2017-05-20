@@ -1,10 +1,10 @@
-﻿/**
- * jQuery EasyUI 1.3.6
+/**
+ * jQuery EasyUI 1.5.2
  * 
- * Copyright (c) 2009-2014 www.jeasyui.com. All rights reserved.
+ * Copyright (c) 2009-2017 www.jeasyui.com. All rights reserved.
  *
- * Licensed under the GPL license: http://www.gnu.org/licenses/gpl.txt
- * To use it on other terms please contact us at info@jeasyui.com
+ * Licensed under the freeware license: http://www.jeasyui.com/license_freeware.php
+ * To use it on other terms please contact us: info@jeasyui.com
  *
  */
 /**
@@ -18,6 +18,12 @@
 	function init(target){
 		$(target).addClass('progressbar');
 		$(target).html('<div class="progressbar-text"></div><div class="progressbar-value"><div class="progressbar-text"></div></div>');
+		$(target).bind('_resize', function(e,force){
+			if ($(this).hasClass('easyui-fluid') || force){
+				setSize(target);
+			}
+			return false;
+		});
 		return $(target);
 	}
 	
@@ -25,9 +31,9 @@
 		var opts = $.data(target, 'progressbar').options;
 		var bar = $.data(target, 'progressbar').bar;
 		if (width) opts.width = width;
-		bar._outerWidth(opts.width)._outerHeight(opts.height);
+		bar._size(opts);
 		
-		bar.find('div.progressbar-text').width(bar.width());
+		bar.find('div.progressbar-text').css('width', bar.width());
 		bar.find('div.progressbar-text,div.progressbar-value').css({
 			height: bar.height()+'px',
 			lineHeight: bar.height()+'px'

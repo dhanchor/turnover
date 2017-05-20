@@ -8,11 +8,34 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-save"plain="true" style="display: none" id="save{{id}}" onclick="obj.save();">保存</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-redo"plain="true" style="display: none" id="redo{{id}}" onclick="obj.redo();">取消编辑</a>
     </div>
+    <div>
+        <table>
+            <tr>
+                <td style="width: 120px">床号：<input class="easyui-textbox" data-options="disabled:true" style="width: 50px"></td>
+                <td style="width: 120px">住院号：<input class="easyui-textbox" data-options="disabled:true" style="width: 50px"></td>
+                <td style="width: 120px">病人状况：<input class="easyui-textbox" data-options="disabled:true" style="width: 50px"></td>
+                <td style="width: 120px">姓名：<input class="easyui-textbox" data-options="disabled:true" style="width: 50px"></td>
+                <td style="width: 120px">性别：<input class="easyui-textbox" data-options="disabled:true" style="width: 50px"></td>
+                <td style="width: 120px">年龄：<input class="easyui-textbox" data-options="disabled:true" style="width: 50px"></td>
+                <td style="width: 300px">主要诊断：<input class="easyui-textbox" data-options="disabled:true" style="width: 150px"></td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td style="width: 400px">交班内容：<input class="easyui-textbox" data-options="multiline:true" value="This TextBox will allow the user to enter multiple lines of text.{{id}}" style="width:300px;height:100px"></td>
+                <td style="width: 400px">重点关注内容：<input class="easyui-textbox" data-options="multiline:true" value="This TextBox will allow the user to enter multiple lines of text.{{id}}" style="width:300px;height:100px"></td>
+            </tr>
+        </table>
+        
+    </div>
 </div>
 
 <script>
 
 $(function(){
+   
     $('#turnover{{id}}').datagrid({
         url:'/get_patient_list',
         fit : true,

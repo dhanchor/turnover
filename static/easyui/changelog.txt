@@ -1,4 +1,185 @@
+Version 1.5.2
+-------------
+* Bug
+ * form: The initialized value of the inputing box will disappear after calling the 'reset' method. fixed.
+ * textbox: Calling the 'destroy' method does not clean the field label. fixed.
+ * datagrid: Calling the 'selectRow' method on an unexisting row causes undesired record set. fixed.
+* Improvement
+ * datagrid: The ctrl selection is supported on Mac keyboards.
+ * datagrid: The 'scrollOnSelect' property is available for the user to determine whether to scroll to the specified row when selecting it.
+ * combotree: Add the 'textField' property.
+ * combotreegrid: Add the 'textField' property.
+ * pagination: Add 'showPageInfo' property.
+ * panel: Add 'halign' and 'titleDirection' properties to allow the user to align the panel header to left or right side.
+ * accordion: Add 'halign' property to build the horizontal accordion.
+ * tagbox: The 'required' propery can be applied to validate whether the value is empty.
+
+Version 1.5.1
+-------------
+* Bug
+ * datagrid: The selecting and checking flags will lose after calling 'updateRow' method. fixed.
+ * tabs: The trip tools have a wrong position when calling 'update' method. fixed.
+ * window: When the height is set to 'auto', it will disappear after moving the window. fixed.
+ * messager: When display the progress message window and then close it immediately, an exception occurs. fixed.
+ * form: The 'clear' method does not clear the selected drop-down items of the combobox. fixed.
+* Improvement
+ * textbox: The 'cls' property is available to add a custom style to textbox.
+ * numberbox: Allow the user to format currency in Italian.
+ * combo: Add 'multivalue' property that allows the user to determine how to submit the multiple values.
+ * combobox: Add 'reversed' property.
+ * combobox: Add 'onClick' event.
+ * combogrid: Add 'reversed' property.
+ * treegrid: Enable multiple selection with the shift key.
+* New Plugins
+ * tagbox: Allows the user to add tags to a form field.
+
+Version 1.5
+-------------
+* Bug
+ * combobox: The 'onSelect' event does not fire when load data that contains the selected item. fixed.
+ * datagrid: The 'updateRow' method sometimes does not work properly when the field is set to a blank value. fixed.
+* Improvement
+ * A label can be associated to any form fields.
+ * combobox: Enhance the 'select' and 'unselect' rules on the drop-down items.
+ * combobox: Add 'limitToList' property to limit the inputed values to the listed items.
+ * combogrid: Allow the user to clone the component quickly.
+ * form: Add the 'dirty' property that allows the user to submit the only changed fields.
+ * form: Add 'resetDirty' method.
+ * datagrid: Allow the user to display a message when there are no records to be shown.
+ * textbox: Add 'label','labelWidth','labelPosition' and 'labelAlign' properties.
+ * spinner: Add 'spinAlign' property.
+ * calendar: Allow the user to display week number of the year.
+ * window: Add 'constrain' property.
+* New Plugins
+ * passwordbox: The plugin that allows the user to input passwords with nice feedback.
+ * combotreegrid: Combines combobox with drop-down treegrid component.
+
+Version 1.4.5
+-------------
+* Bug
+ * datagrid: The 'getChanges' method does not return the updated rows after calling 'updateRow' method. fixed.
+ * treegrid: The 'onLoadSuccess' event fires when append or insert a row. fixed.
+ * tree: The 'onLoadSuccess' event fires when append or insert a node. fixed.
+* Improvement
+ * window: The displaying style can be customized.
+ * window: The 'border' property allows the user to set different border style.
+ * navpanel: The 'href' property is enabled to load content from remote server.
+ * combotree: The 'setValue' and 'setValues' methods accept the paremter values in 'id' and 'text' pairs
+ * combobox: Add 'showItemIcon' property.
+ * combobox: Set 'groupPosition' property to 'sticky' to stick the item group to the top of drop-down panel.
+ * messager: Pressing ENTER key on input box will trigger click event of the first button.
+ * validatebox: Add 'editable',disabled' and 'readonly' properties.
+ * validatebox: Add 'enable','disable','readonly' methods.
+ * validatebox: Allow the user to determine how to display the error message.
+ * filebox: Add 'accept' and 'multiple' properties.
+ * form: Add 'iframe' property and 'onProgress' event.
+ * treegrid: Add cascade checkbox selection.
+ * treegrid: Add 'getCheckedNodes','checkNode' and 'uncheckNode' methods.
+
+Version 1.4.4
+-------------
+* Bug
+ * filebox: The 'clear' and 'reset' methods do not work properly in IE9. fixed.
+ * messager: After calling $.messager.progress() with no arguments, the $.messager.progress('close') does not work properly. fixed.
+ * timespinner: The value does not display properly in IE8 while clicking the spin buttons. fixed.
+ * window: The window does not display when calling 'options' method in 'onMove' event. fixed.
+ * treegrid: The 'getLevel' method does not accept the parameter value of 0. fixed.
+* Improvement
+ * layout: The 'collapsedContent','expandMode' and 'hideExpandTool' properties are supported in region panel.
+ * layout: The 'hideCollapsedContent' property can be set to display the vertical title bar on collapsed panel.
+ * layout: Add 'onCollapse','onExpand','onAdd','onRemove' events.
+ * datagrid: Display the 'up-down' icon on the sortable columns.
+ * datagrid: Add 'gotoPage' method.
+ * propertygrid: Add 'groups' method that allows to get all the data groups.
+ * messager: Auto scroll feature is supported when displaying long messages.
+ * tabs: The 'disabled' property is supported when defining a disabled tab panel.
+ * tabs: The percentange size is supported now.
+
+Version 1.4.3
+-------------
+* Bug
+ * textbox: The 'setText' method does not accept value 0. fixed.
+ * timespinner: When running in IE11, the error occurs when clicking on the empty textbox. fixed.
+ * tabs: The 'update' method can not update only the panel body. fixed.
+* Improvement
+ * combobox: Improve the performance of displaying the drop-down panel.
+ * combogrid: Remember the displaying text when the drop-down datagrid go to other pages.
+ * combogrid: The 'setValue' and 'setValues' methods accept a key-value object.
+ * window: The inline window's mask can auto-stretch its size to fill parent container.
+ * tabs: The 'showTool' and 'hideTool' methods are available for users to show or hide the tools.
+ * layout: Allow the user to override the 'cls','headerCls' and 'bodyCls' property values.
+* New Plugins
+ * switchbutton: The switch button with two states:'on' and 'off'.
+
+Version 1.4.2
+-------------
+* Bug
+ * treegrid: The column will restore its size to original size after recreating the treegrid. fixed.
+* Improvement
+ * draggable: Add 'delay' property that allows the user to delay the drag operation.
+ * tree: Add 'filter' property and 'doFilter' method.
+ * tabs: The 'add' method allows the user to insert a tab panel at a specified index.
+ * tabs: The user can determine what tab panel can be selected.
+ * tabs: Add 'justified' and 'narrow' properties.
+ * layout: Add 'unsplit' and 'split' methods.
+ * messager: Keyboard navigation features are supported now.
+ * form: Add 'onChange' event.
+ * combobox: Add 'queryParams' property.
+ * slider: Add 'range' property.
+ * menu: Add 'itemHeight','inline','noline' properties.
+ * panel: The 'header' property allows the user to customize the panel header.
+ * menubutton: Add 'hasDownArrow' property.
+* New Plugins
+ * datalist: The plugin to render items in a list.
+ * navpanel: The root component for the mobile page.
+ * mobile: The plugin to provide the mobile page stack management and navigation.
+
+Version 1.4.1
+-------------
+* Bug
+ * combogrid: The combogrid has different height than other combo components. fixed.
+ * datagrid: The row element loses some class style value after calling 'updateRow' method. fixed.
+ * menubutton: Calling 'enable' method on a disabled button can not work well. fixed.
+ * form: The filebox components in the form do not work correctly after calling 'clear' method. fixed.
+* Improvement
+ * tabs: The 'update' method accepts 'type' option that allows the user to update the header,body,or both.
+ * panel: Add 'openAnimation','openDuration','closeAnimation' and 'closeDuration' properties to set the animation for opening or closing a panel.
+ * panel: Add 'footer' property that allows the user to add a footer bar to the bottom of panel.
+ * datagrid: Calling 'endEdit' method will accept the editing value correctly.
+ * datagrid: Add 'onBeforeSelect','onBeforeCheck','onBeforeUnselect','onBeforeUncheck' events.
+ * propertygrid: The user can edit a row by calling 'beginEdit' method.
+ * datebox: Add 'cloneFrom' method to create the datebox component quickly.
+ * datetimebox: Add 'cloneFrom' method to create the datetimebox component quickly.
+
+Version 1.4
+-------------
+* Bug
+ * menu: The menu should not has a correct height when removed a menu item. fixed.
+ * datagrid: The 'fitColumns' method does not work normally when the datarid width is too small. fixed.
+* Improvement
+ * The fluid/percentange size is supported now for all easyui components.
+ * menu: Add 'showItem', 'hideItem' and 'resize' methods.
+ * menu: Auto resize the height upon the window size.
+ * menu: Add 'duration' property that allows the user to define duration time in milliseconds to hide menu.
+ * validatebox: Add 'onBeforeValidate' and 'onValidate' events.
+ * combo: Extended from textbox now.
+ * combo: Add 'panelMinWidth','panelMaxWidth','panelMinHeight' and 'panelMaxHeight' properties.
+ * searchbox: Extended from textbox now.
+ * tree: The 'getRoot' method will return the top parent node of a specified node if pass a 'nodeEl' parameter.
+ * tree: Add 'queryParams' property.
+ * datetimebox: Add 'spinnerWidth' property.
+ * panel: Add 'doLayout' method to cause the panel to lay out its components.
+ * panel: Add 'clear' method to clear the panel's content.
+ * datagrid: The user is allowed to assign percent width to columns.
+ * form: Add 'ajax','novalidate' and 'queryParams' properties.
+ * linkbutton: Add 'resize' method.
+* New Plugins
+ * textbox: A enhanced input field that allows users build their form easily.
+ * datetimespinner: A date and time spinner that allows to pick a specific day.
+ * filebox: The filebox component represents a file field of the forms.
+
 Version 1.3.6
+-------------
 * Bug
  * treegrid: The 'getChecked' method can not return correct checked rows. fixed.
  * tree: The checkbox does not display properly on async tree when 'onlyLeafCheck' property is true. fixed.

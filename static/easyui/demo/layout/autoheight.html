@@ -50,8 +50,9 @@
 			var oldHeight = p.panel('panel').outerHeight();
 			p.panel('resize', {height:'auto'});
 			var newHeight = p.panel('panel').outerHeight();
-			c.height(c.height() + newHeight - oldHeight);
-			c.layout('resize');
+			c.layout('resize',{
+				height: (c.height() + newHeight - oldHeight)
+			});
 		}
 	</script>
 </body>

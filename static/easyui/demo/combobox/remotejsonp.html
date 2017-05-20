@@ -13,30 +13,33 @@
 	<h2>Remote JSONP</h2>
 	<p>This sample shows how to use JSONP to retrieve data from a remote site.</p>
 	<div style="margin:20px 0"></div>
-	<input class="easyui-combobox" style="width:250px" data-options="
-				loader: myloader,
-				mode: 'remote',
-				valueField: 'id',
-				textField: 'name'
-			">
+	<div class="easyui-panel" style="width:100%;max-width:400px;padding:30px 60px;">
+		<div style="margin-bottom:20px">
+			<input class="easyui-combobox" style="width:100%;" data-options="
+					loader: myloader,
+					mode: 'remote',
+					valueField: 'id',
+					textField: 'name',
+					label: 'State:',
+					labelPosition: 'top'
+					">
+		</div>
+	</div>
 	<script>
 		var myloader = function(param,success,error){
 			var q = param.q || '';
-			if (q.length <= 1){return false}
+			if (q.length <= 2){return false}
 			$.ajax({
-				url: 'http://ws.geonames.org/searchJSON',
+				url: 'http://gd.geobytes.com/AutoCompleteCity',
 				dataType: 'jsonp',
                 data: {
-                    featureClass: "P",
-                    style: "full",
-                    maxRows: 20,
-                    name_startsWith: q
+                    q: q
                 },
 				success: function(data){
-					var items = $.map(data.geonames, function(item){
+					var items = $.map(data, function(item,index){
 						return {
-							id: item.geonameId,
-							name: item.name + (item.adminName1 ? ', ' + item.adminName1 : '') + ', ' + item.countryName
+							id: index,
+							name: item
 						};
 					});
 					success(items);

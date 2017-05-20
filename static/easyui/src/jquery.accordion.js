@@ -1,10 +1,10 @@
-﻿/**
- * jQuery EasyUI 1.3.6
+/**
+ * jQuery EasyUI 1.5.2
  * 
- * Copyright (c) 2009-2014 www.jeasyui.com. All rights reserved.
+ * Copyright (c) 2009-2017 www.jeasyui.com. All rights reserved.
  *
- * Licensed under the GPL license: http://www.gnu.org/licenses/gpl.txt
- * To use it on other terms please contact us at info@jeasyui.com
+ * Licensed under the freeware license: http://www.jeasyui.com/license_freeware.php
+ * To use it on other terms please contact us: info@jeasyui.com
  *
  */
 /**
@@ -16,47 +16,111 @@
  */
 (function($){
 	
-	function setSize(container){
+	// function setSize(container, param){
+	// 	var state = $.data(container, 'accordion');
+	// 	var opts = state.options;
+	// 	var panels = state.panels;
+	// 	var cc = $(container);
+		
+	// 	if (param){
+	// 		$.extend(opts, {
+	// 			width: param.width,
+	// 			height: param.height
+	// 		});
+	// 	}
+	// 	cc._size(opts);
+	// 	var headerHeight = 0;
+	// 	var bodyHeight = 'auto';
+	// 	var headers = cc.find('>.panel>.accordion-header');
+	// 	if (headers.length){
+	// 		headerHeight = $(headers[0]).css('height', '')._outerHeight();
+	// 	}
+	// 	if (!isNaN(parseInt(opts.height))){
+	// 		bodyHeight = cc.height() - headerHeight*headers.length;
+	// 	}
+		
+	// 	_resize(true, bodyHeight - _resize(false) + 1);
+		
+	// 	function _resize(collapsible, height){
+	// 		var totalHeight = 0;
+	// 		for(var i=0; i<panels.length; i++){
+	// 			var p = panels[i];
+	// 			var h = p.panel('header')._outerHeight(headerHeight);
+	// 			if (p.panel('options').collapsible == collapsible){
+	// 				var pheight = isNaN(height) ? undefined : (height+headerHeight*h.length);
+	// 				p.panel('resize', {
+	// 					width: cc.width(),
+	// 					height: (collapsible ? pheight : undefined)
+	// 				});
+	// 				totalHeight += p.panel('panel').outerHeight()-headerHeight*h.length;
+	// 			}
+	// 		}
+	// 		return totalHeight;
+	// 	}
+	// }
+
+	function setSize(container, param){
 		var state = $.data(container, 'accordion');
 		var opts = state.options;
 		var panels = state.panels;
-		
 		var cc = $(container);
-		opts.fit ? $.extend(opts, cc._fit()) : cc._fit(false);
-		
-		if (!isNaN(opts.width)){
-			cc._outerWidth(opts.width);
-		} else {
-			cc.css('width', '');
+		var isHorizontal = (opts.halign=='left' || opts.halign=='right');
+		cc.children('.panel-last').removeClass('panel-last');
+		cc.children('.panel:last').addClass('panel-last');
+
+		if (param){
+			$.extend(opts, {
+				width: param.width,
+				height: param.height
+			});
 		}
-		
+		cc._size(opts);
 		var headerHeight = 0;
 		var bodyHeight = 'auto';
-		var headers = cc.find('>div.panel>div.accordion-header');
+		var headers = cc.find('>.panel>.accordion-header');
 		if (headers.length){
-			headerHeight = $(headers[0]).css('height', '')._outerHeight();
+			if (isHorizontal){
+				$(panels[0]).panel('resize', {width:cc.width(),height:cc.height()});
+				headerHeight = $(headers[0])._outerWidth();
+			} else {
+				headerHeight = $(headers[0]).css('height', '')._outerHeight();
+			}
 		}
-		if (!isNaN(opts.height)){
-			cc._outerHeight(opts.height);
-			bodyHeight = cc.height() - headerHeight*headers.length;
-		} else {
-			cc.css('height', '');
+		if (!isNaN(parseInt(opts.height))){
+			if (isHorizontal){
+				bodyHeight = cc.width() - headerHeight*headers.length;
+			} else {
+				bodyHeight = cc.height() - headerHeight*headers.length;
+			}
 		}
 		
-		_resize(true, bodyHeight - _resize(false) + 1);
+		// _resize(true, bodyHeight - _resize(false) + 1);
+		_resize(true, bodyHeight - _resize(false));
 		
 		function _resize(collapsible, height){
 			var totalHeight = 0;
 			for(var i=0; i<panels.length; i++){
 				var p = panels[i];
-				var h = p.panel('header')._outerHeight(headerHeight);
+				if (isHorizontal){
+					var h = p.panel('header')._outerWidth(headerHeight);
+				} else {
+					var h = p.panel('header')._outerHeight(headerHeight);
+				}
 				if (p.panel('options').collapsible == collapsible){
 					var pheight = isNaN(height) ? undefined : (height+headerHeight*h.length);
-					p.panel('resize', {
-						width: cc.width(),
-						height: (collapsible ? pheight : undefined)
-					});
-					totalHeight += p.panel('panel').outerHeight()-headerHeight;
+					if (isHorizontal){
+						p.panel('resize', {
+							height: cc.height(),
+							width: (collapsible ? pheight : undefined)
+						});
+						totalHeight += p.panel('panel')._outerWidth()-headerHeight*h.length;
+					} else {
+						p.panel('resize', {
+							width: cc.width(),
+							height: (collapsible ? pheight : undefined)
+						});
+						totalHeight += p.panel('panel').outerHeight()-headerHeight*h.length;
+					}
 				}
 			}
 			return totalHeight;
@@ -145,8 +209,7 @@
 		});
 		
 		cc.bind('_resize', function(e,force){
-			var opts = $.data(container, 'accordion').options;
-			if (opts.fit == true || force){
+			if ($(this).hasClass('easyui-fluid') || force){
 				setSize(container);
 			}
 			return false;
@@ -163,7 +226,8 @@
 			doSize: false,
 			collapsed: true,
 			headerCls: 'accordion-header',
-			bodyCls: 'accordion-body'
+			bodyCls: 'accordion-body',
+			halign: opts.halign
 		}, options, {
 			onBeforeExpand: function(){
 				if (options.onBeforeExpand){
@@ -183,6 +247,7 @@
 				header.find('.accordion-collapse').removeClass('accordion-expand');
 			},
 			onExpand: function(){
+				$(container).find('>.panel-last>.accordion-header').removeClass('accordion-header-border');
 				if (options.onExpand){options.onExpand.call(this)}
 				opts.onSelect.call(container, $(this).panel('options').title, getPanelIndex(container, this));
 			},
@@ -190,11 +255,15 @@
 				if (options.onBeforeCollapse){
 					if (options.onBeforeCollapse.call(this) == false){return false}
 				}
+				$(container).find('>.panel-last>.accordion-header').addClass('accordion-header-border');
 				var header = $(this).panel('header');
 				header.removeClass('accordion-header-selected');
 				header.find('.accordion-collapse').addClass('accordion-expand');
 			},
 			onCollapse: function(){
+				if (isNaN(parseInt(opts.height))){
+					$(container).find('>.panel-last>.accordion-header').removeClass('accordion-header-border');
+				}
 				if (options.onCollapse){options.onCollapse.call(this)}
 				opts.onUnselect.call(container, $(this).panel('options').title, getPanelIndex(container, this));
 			}
@@ -203,22 +272,32 @@
 		var header = pp.panel('header');
 		var tool = header.children('div.panel-tool');
 		tool.children('a.panel-tool-collapse').hide();	// hide the old collapse button
-		var t = $('<a href="javascript:void(0)"></a>').addClass('accordion-collapse accordion-expand').appendTo(tool);
+		var t = $('<a href="javascript:;"></a>').addClass('accordion-collapse accordion-expand').appendTo(tool);
 		t.bind('click', function(){
-			var index = getPanelIndex(container, pp);
-			if (pp.panel('options').collapsed){
-				select(container, index);
-			} else {
-				unselect(container, index);
-			}
+			togglePanel(pp);
 			return false;
 		});
 		pp.panel('options').collapsible ? t.show() : t.hide();
+		if (opts.halign=='left' || opts.halign=='right'){
+			t.hide();
+		}
 		
 		header.click(function(){
-			$(this).find('a.accordion-collapse:visible').triggerHandler('click');
+			togglePanel(pp);
 			return false;
 		});
+		
+		function togglePanel(p){
+			var popts = p.panel('options');
+			if (popts.collapsible){
+				var index = getPanelIndex(container, p);
+				if (popts.collapsed){
+					select(container, index);
+				} else {
+					unselect(container, index);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -242,6 +321,8 @@
 	
 	function doFirstSelect(container){
 		var opts = $.data(container, 'accordion').options;
+		$(container).find('>.panel-last>.accordion-header').addClass('accordion-header-border');
+
 		var p = findBy(container, 'selected', true);
 		if (p){
 			_select(getPanelIndex(container, p));
@@ -320,7 +401,6 @@
 		}
 		
 		options = options || {};
-		
 		return this.each(function(){
 			var state = $.data(this, 'accordion');
 			if (state){
@@ -347,9 +427,9 @@
 		panels: function(jq){
 			return $.data(jq[0], 'accordion').panels;
 		},
-		resize: function(jq){
+		resize: function(jq, param){
 			return jq.each(function(){
-				setSize(this);
+				setSize(this, param);
 			});
 		},
 		getSelections: function(jq){
@@ -389,7 +469,7 @@
 	$.fn.accordion.parseOptions = function(target){
 		var t = $(target);
 		return $.extend({}, $.parser.parseOptions(target, [
-			'width','height',
+			'width','height','halign',
 			{fit:'boolean',border:'boolean',animate:'boolean',multiple:'boolean',selected:'number'}
 		]));
 	};
@@ -402,6 +482,7 @@
 		animate: true,
 		multiple: false,
 		selected: 0,
+		halign: 'top',	// the header alignment: 'top','left','right'
 		
 		onSelect: function(title, index){},
 		onUnselect: function(title, index){},

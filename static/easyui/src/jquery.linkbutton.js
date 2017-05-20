@@ -1,10 +1,10 @@
-﻿/**
- * jQuery EasyUI 1.3.6
+/**
+ * jQuery EasyUI 1.5.2
  * 
- * Copyright (c) 2009-2014 www.jeasyui.com. All rights reserved.
+ * Copyright (c) 2009-2017 www.jeasyui.com. All rights reserved.
  *
- * Licensed under the GPL license: http://www.gnu.org/licenses/gpl.txt
- * To use it on other terms please contact us at info@jeasyui.com
+ * Licensed under the freeware license: http://www.jeasyui.com/license_freeware.php
+ * To use it on other terms please contact us: info@jeasyui.com
  *
  */
 /**
@@ -12,14 +12,49 @@
  * 
  */
 (function($){
+	function setSize(target, param){
+		var opts = $.data(target, 'linkbutton').options;
+		if (param){
+			$.extend(opts, param);
+		}
+		if (opts.width || opts.height || opts.fit){
+			var btn = $(target);
+			var parent = btn.parent();
+			var isVisible = btn.is(':visible');
+			if (!isVisible){
+				var spacer = $('<div style="display:none"></div>').insertBefore(target);
+				var style = {
+					position: btn.css('position'),
+					display: btn.css('display'),
+					left: btn.css('left')
+				};
+				btn.appendTo('body');
+				btn.css({
+					position: 'absolute',
+					display: 'inline-block',
+					left: -20000
+				});
+			}
+			btn._size(opts, parent);
+			var left = btn.find('.l-btn-left');
+			left.css('margin-top', 0);
+			left.css('margin-top', parseInt((btn.height()-left.height())/2)+'px');
+			if (!isVisible){
+				btn.insertAfter(spacer);
+				btn.css(style);
+				spacer.remove();
+			}
+		}
+	}
 	
 	function createButton(target) {
 		var opts = $.data(target, 'linkbutton').options;
 		var t = $(target).empty();
 		
-		t.addClass('l-btn').removeClass('l-btn-plain l-btn-selected l-btn-plain-selected');
+		t.addClass('l-btn').removeClass('l-btn-plain l-btn-selected l-btn-plain-selected l-btn-outline');
 		t.removeClass('l-btn-small l-btn-medium l-btn-large').addClass('l-btn-'+opts.size);
 		if (opts.plain){t.addClass('l-btn-plain')}
+		if (opts.outline){t.addClass('l-btn-outline')}
 		if (opts.selected){
 			t.addClass(opts.plain ? 'l-btn-selected l-btn-plain-selected' : 'l-btn-selected');
 		}
@@ -54,7 +89,7 @@
 				}
 				opts.onClick.call(this);
 			}
-			return false;
+//			return false;
 		});
 //		if (opts.toggle && !opts.disabled){
 //			t.bind('click.linkbutton', function(){
@@ -101,7 +136,7 @@
 			var href = $(target).attr('href');
 			if (href){
 				state.href = href;
-				$(target).attr('href', 'javascript:void(0)');
+				$(target).attr('href', 'javascript:;');
 			}
 			if (target.onclick){
 				state.onclick = target.onclick;
@@ -134,15 +169,27 @@
 					options: $.extend({}, $.fn.linkbutton.defaults, $.fn.linkbutton.parseOptions(this), options)
 				});
 				$(this).removeAttr('disabled');
+				$(this).bind('_resize', function(e, force){
+					if ($(this).hasClass('easyui-fluid') || force){
+						setSize(this);
+					}
+					return false;
+				});
 			}
 			
 			createButton(this);
+			setSize(this);
 		});
 	};
 	
 	$.fn.linkbutton.methods = {
 		options: function(jq){
 			return $.data(jq[0], 'linkbutton').options;
+		},
+		resize: function(jq, param){
+			return jq.each(function(){
+				setSize(this, param);
+			});
 		},
 		enable: function(jq){
 			return jq.each(function(){
@@ -169,10 +216,10 @@
 	$.fn.linkbutton.parseOptions = function(target){
 		var t = $(target);
 		return $.extend({}, $.parser.parseOptions(target, 
-			['id','iconCls','iconAlign','group','size',{plain:'boolean',toggle:'boolean',selected:'boolean'}]
+			['id','iconCls','iconAlign','group','size','text',{plain:'boolean',toggle:'boolean',selected:'boolean',outline:'boolean'}]
 		), {
 			disabled: (t.attr('disabled') ? true : undefined),
-			text: $.trim(t.html()),
+			text: ($.trim(t.html()) || undefined),
 			iconCls: (t.attr('icon') || t.attr('iconCls'))
 		});
 	};
@@ -182,6 +229,7 @@
 		disabled: false,
 		toggle: false,
 		selected: false,
+		outline: false,
 		group: null,
 		plain: false,
 		text: '',

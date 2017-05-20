@@ -1,192 +1,260 @@
-﻿/**
- * jQuery EasyUI 1.3.6
+/**
+ * jQuery EasyUI 1.5.2
  * 
- * Copyright (c) 2009-2014 www.jeasyui.com. All rights reserved.
+ * Copyright (c) 2009-2017 www.jeasyui.com. All rights reserved.
  *
- * Licensed under the GPL license: http://www.gnu.org/licenses/gpl.txt
- * To use it on other terms please contact us at info@jeasyui.com
+ * Licensed under the freeware license: http://www.jeasyui.com/license_freeware.php
+ * To use it on other terms please contact us: info@jeasyui.com
  *
  */
 (function($){
 function _1(_2,_3){
-_3=_3||{};
-var _4={};
-if(_3.onSubmit){
-if(_3.onSubmit.call(_2,_4)==false){
+var _4=$.data(_2,"form").options;
+$.extend(_4,_3||{});
+var _5=$.extend({},_4.queryParams);
+if(_4.onSubmit.call(_2,_5)==false){
 return;
 }
+var _6=$(_2).find(".textbox-text:focus");
+_6.triggerHandler("blur");
+_6.focus();
+var _7=null;
+if(_4.dirty){
+var ff=[];
+$.map(_4.dirtyFields,function(f){
+if($(f).hasClass("textbox-f")){
+$(f).next().find(".textbox-value").each(function(){
+ff.push(this);
+});
+}else{
+ff.push(f);
 }
-var _5=$(_2);
-if(_3.url){
-_5.attr("action",_3.url);
+});
+_7=$(_2).find("input[name]:enabled,textarea[name]:enabled,select[name]:enabled").filter(function(){
+return $.inArray(this,ff)==-1;
+});
+_7.attr("disabled","disabled");
 }
-var _6="easyui_frame_"+(new Date().getTime());
-var _7=$("<iframe id="+_6+" name="+_6+"></iframe>").attr("src",window.ActiveXObject?"javascript:false":"about:blank").css({position:"absolute",top:-1000,left:-1000});
-var t=_5.attr("target"),a=_5.attr("action");
-_5.attr("target",_6);
-var _8=$();
+if(_4.ajax){
+if(_4.iframe){
+_8(_2,_5);
+}else{
+if(window.FormData!==undefined){
+_9(_2,_5);
+}else{
+_8(_2,_5);
+}
+}
+}else{
+$(_2).submit();
+}
+if(_4.dirty){
+_7.removeAttr("disabled");
+}
+};
+function _8(_a,_b){
+var _c=$.data(_a,"form").options;
+var _d="easyui_frame_"+(new Date().getTime());
+var _e=$("<iframe id="+_d+" name="+_d+"></iframe>").appendTo("body");
+_e.attr("src",window.ActiveXObject?"javascript:false":"about:blank");
+_e.css({position:"absolute",top:-1000,left:-1000});
+_e.bind("load",cb);
+_f(_b);
+function _f(_10){
+var _11=$(_a);
+if(_c.url){
+_11.attr("action",_c.url);
+}
+var t=_11.attr("target"),a=_11.attr("action");
+_11.attr("target",_d);
+var _12=$();
 try{
-_7.appendTo("body");
-_7.bind("load",cb);
-for(var n in _4){
-var f=$("<input type=\"hidden\" name=\""+n+"\">").val(_4[n]).appendTo(_5);
-_8=_8.add(f);
+for(var n in _10){
+var _13=$("<input type=\"hidden\" name=\""+n+"\">").val(_10[n]).appendTo(_11);
+_12=_12.add(_13);
 }
-_9();
-_5[0].submit();
+_14();
+_11[0].submit();
 }
 finally{
-_5.attr("action",a);
-t?_5.attr("target",t):_5.removeAttr("target");
-_8.remove();
+_11.attr("action",a);
+t?_11.attr("target",t):_11.removeAttr("target");
+_12.remove();
 }
-function _9(){
-var f=$("#"+_6);
+};
+function _14(){
+var f=$("#"+_d);
 if(!f.length){
 return;
 }
 try{
 var s=f.contents()[0].readyState;
 if(s&&s.toLowerCase()=="uninitialized"){
-setTimeout(_9,100);
+setTimeout(_14,100);
 }
 }
 catch(e){
 cb();
 }
 };
-var _a=10;
+var _15=10;
 function cb(){
-var _b=$("#"+_6);
-if(!_b.length){
+var f=$("#"+_d);
+if(!f.length){
 return;
 }
-_b.unbind();
-var _c="";
+f.unbind();
+var _16="";
 try{
-var _d=_b.contents().find("body");
-_c=_d.html();
-if(_c==""){
-if(--_a){
+var _17=f.contents().find("body");
+_16=_17.html();
+if(_16==""){
+if(--_15){
 setTimeout(cb,100);
 return;
 }
 }
-var ta=_d.find(">textarea");
+var ta=_17.find(">textarea");
 if(ta.length){
-_c=ta.val();
+_16=ta.val();
 }else{
-var _e=_d.find(">pre");
-if(_e.length){
-_c=_e.html();
+var pre=_17.find(">pre");
+if(pre.length){
+_16=pre.html();
 }
 }
 }
 catch(e){
 }
-if(_3.success){
-_3.success(_c);
-}
+_c.success.call(_a,_16);
 setTimeout(function(){
-_b.unbind();
-_b.remove();
+f.unbind();
+f.remove();
 },100);
 };
 };
-function _f(_10,_11){
-if(!$.data(_10,"form")){
-$.data(_10,"form",{options:$.extend({},$.fn.form.defaults)});
+function _9(_18,_19){
+var _1a=$.data(_18,"form").options;
+var _1b=new FormData($(_18)[0]);
+for(var _1c in _19){
+_1b.append(_1c,_19[_1c]);
 }
-var _12=$.data(_10,"form").options;
-if(typeof _11=="string"){
-var _13={};
-if(_12.onBeforeLoad.call(_10,_13)==false){
+$.ajax({url:_1a.url,type:"post",xhr:function(){
+var xhr=$.ajaxSettings.xhr();
+if(xhr.upload){
+xhr.upload.addEventListener("progress",function(e){
+if(e.lengthComputable){
+var _1d=e.total;
+var _1e=e.loaded||e.position;
+var _1f=Math.ceil(_1e*100/_1d);
+_1a.onProgress.call(_18,_1f);
+}
+},false);
+}
+return xhr;
+},data:_1b,dataType:"html",cache:false,contentType:false,processData:false,complete:function(res){
+_1a.success.call(_18,res.responseText);
+}});
+};
+function _20(_21,_22){
+var _23=$.data(_21,"form").options;
+if(typeof _22=="string"){
+var _24={};
+if(_23.onBeforeLoad.call(_21,_24)==false){
 return;
 }
-$.ajax({url:_11,data:_13,dataType:"json",success:function(_14){
-_15(_14);
+$.ajax({url:_22,data:_24,dataType:"json",success:function(_25){
+_26(_25);
 },error:function(){
-_12.onLoadError.apply(_10,arguments);
+_23.onLoadError.apply(_21,arguments);
 }});
 }else{
-_15(_11);
+_26(_22);
 }
-function _15(_16){
-var _17=$(_10);
-for(var _18 in _16){
-var val=_16[_18];
-var rr=_19(_18,val);
-if(!rr.length){
-var _1a=_1b(_18,val);
-if(!_1a){
-$("input[name=\""+_18+"\"]",_17).val(val);
-$("textarea[name=\""+_18+"\"]",_17).val(val);
-$("select[name=\""+_18+"\"]",_17).val(val);
+function _26(_27){
+var _28=$(_21);
+for(var _29 in _27){
+var val=_27[_29];
+if(!_2a(_29,val)){
+if(!_2b(_29,val)){
+_28.find("input[name=\""+_29+"\"]").val(val);
+_28.find("textarea[name=\""+_29+"\"]").val(val);
+_28.find("select[name=\""+_29+"\"]").val(val);
 }
 }
-_1c(_18,val);
 }
-_12.onLoadSuccess.call(_10,_16);
-_29(_10);
+_23.onLoadSuccess.call(_21,_27);
+_28.form("validate");
 };
-function _19(_1d,val){
-var rr=$(_10).find("input[name=\""+_1d+"\"][type=radio], input[name=\""+_1d+"\"][type=checkbox]");
-rr._propAttr("checked",false);
-rr.each(function(){
-var f=$(this);
-if(f.val()==String(val)||$.inArray(f.val(),$.isArray(val)?val:[val])>=0){
-f._propAttr("checked",true);
+function _2a(_2c,val){
+var cc=$(_21).find("[switchbuttonName=\""+_2c+"\"]");
+if(cc.length){
+cc.switchbutton("uncheck");
+cc.each(function(){
+if(_2d($(this).switchbutton("options").value,val)){
+$(this).switchbutton("check");
 }
 });
-return rr;
-};
-function _1b(_1e,val){
-var _1f=0;
-var pp=["numberbox","slider"];
-for(var i=0;i<pp.length;i++){
-var p=pp[i];
-var f=$(_10).find("input["+p+"Name=\""+_1e+"\"]");
-if(f.length){
-f[p]("setValue",val);
-_1f+=f.length;
+return true;
 }
+cc=$(_21).find("input[name=\""+_2c+"\"][type=radio], input[name=\""+_2c+"\"][type=checkbox]");
+if(cc.length){
+cc._propAttr("checked",false);
+cc.each(function(){
+if(_2d($(this).val(),val)){
+$(this)._propAttr("checked",true);
 }
-return _1f;
+});
+return true;
+}
+return false;
 };
-function _1c(_20,val){
-var _21=$(_10);
-var cc=["combobox","combotree","combogrid","datetimebox","datebox","combo"];
-var c=_21.find("[comboName=\""+_20+"\"]");
-if(c.length){
-for(var i=0;i<cc.length;i++){
-var _22=cc[i];
-if(c.hasClass(_22+"-f")){
-if(c[_22]("options").multiple){
-c[_22]("setValues",val);
+function _2d(v,val){
+if(v==String(val)||$.inArray(v,$.isArray(val)?val:[val])>=0){
+return true;
 }else{
-c[_22]("setValue",val);
+return false;
 }
+};
+function _2b(_2e,val){
+var _2f=$(_21).find("[textboxName=\""+_2e+"\"],[sliderName=\""+_2e+"\"]");
+if(_2f.length){
+for(var i=0;i<_23.fieldTypes.length;i++){
+var _30=_23.fieldTypes[i];
+var _31=_2f.data(_30);
+if(_31){
+if(_31.options.multiple||_31.options.range){
+_2f[_30]("setValues",val);
+}else{
+_2f[_30]("setValue",val);
+}
+return true;
+}
+}
+}
+return false;
+};
+};
+function _32(_33){
+$("input,select,textarea",_33).each(function(){
+if($(this).hasClass("textbox-value")){
 return;
 }
-}
-}
-};
-};
-function _23(_24){
-$("input,select,textarea",_24).each(function(){
 var t=this.type,tag=this.tagName.toLowerCase();
 if(t=="text"||t=="hidden"||t=="password"||tag=="textarea"){
 this.value="";
 }else{
 if(t=="file"){
-var _25=$(this);
-var _26=_25.clone().val("");
-_26.insertAfter(_25);
-if(_25.data("validatebox")){
-_25.validatebox("destroy");
-_26.validatebox();
+var _34=$(this);
+if(!_34.hasClass("textbox-value")){
+var _35=_34.clone().val("");
+_35.insertAfter(_34);
+if(_34.data("validatebox")){
+_34.validatebox("destroy");
+_35.validatebox();
 }else{
-_25.remove();
+_34.remove();
+}
 }
 }else{
 if(t=="checkbox"||t=="radio"){
@@ -199,99 +267,144 @@ this.selectedIndex=-1;
 }
 }
 });
-var t=$(_24);
-var _27=["combo","combobox","combotree","combogrid","slider"];
-for(var i=0;i<_27.length;i++){
-var _28=_27[i];
-var r=t.find("."+_28+"-f");
-if(r.length&&r[_28]){
-r[_28]("clear");
+var tmp=$();
+var _36=$(_33);
+var _37=$.data(_33,"form").options;
+for(var i=0;i<_37.fieldTypes.length;i++){
+var _38=_37.fieldTypes[i];
+var _39=_36.find("."+_38+"-f").not(tmp);
+if(_39.length&&_39[_38]){
+_39[_38]("clear");
+tmp=tmp.add(_39);
 }
 }
-_29(_24);
+_36.form("validate");
 };
-function _2a(_2b){
-_2b.reset();
-var t=$(_2b);
-var _2c=["combo","combobox","combotree","combogrid","datebox","datetimebox","spinner","timespinner","numberbox","numberspinner","slider"];
-for(var i=0;i<_2c.length;i++){
-var _2d=_2c[i];
-var r=t.find("."+_2d+"-f");
-if(r.length&&r[_2d]){
-r[_2d]("reset");
+function _3a(_3b){
+_3b.reset();
+var _3c=$(_3b);
+var _3d=$.data(_3b,"form").options;
+for(var i=_3d.fieldTypes.length-1;i>=0;i--){
+var _3e=_3d.fieldTypes[i];
+var _3f=_3c.find("."+_3e+"-f");
+if(_3f.length&&_3f[_3e]){
+_3f[_3e]("reset");
 }
 }
-_29(_2b);
+_3c.form("validate");
 };
-function _2e(_2f){
-var _30=$.data(_2f,"form").options;
-var _31=$(_2f);
-_31.unbind(".form").bind("submit.form",function(){
+function _40(_41){
+var _42=$.data(_41,"form").options;
+$(_41).unbind(".form");
+if(_42.ajax){
+$(_41).bind("submit.form",function(){
 setTimeout(function(){
-_1(_2f,_30);
+_1(_41,_42);
 },0);
 return false;
 });
+}
+$(_41).bind("_change.form",function(e,t){
+if($.inArray(t,_42.dirtyFields)==-1){
+_42.dirtyFields.push(t);
+}
+_42.onChange.call(this,t);
+}).bind("change.form",function(e){
+var t=e.target;
+if(!$(t).hasClass("textbox-text")){
+if($.inArray(t,_42.dirtyFields)==-1){
+_42.dirtyFields.push(t);
+}
+_42.onChange.call(this,t);
+}
+});
+_43(_41,_42.novalidate);
 };
-function _29(_32){
+function _44(_45,_46){
+_46=_46||{};
+var _47=$.data(_45,"form");
+if(_47){
+$.extend(_47.options,_46);
+}else{
+$.data(_45,"form",{options:$.extend({},$.fn.form.defaults,$.fn.form.parseOptions(_45),_46)});
+}
+};
+function _48(_49){
 if($.fn.validatebox){
-var t=$(_32);
+var t=$(_49);
 t.find(".validatebox-text:not(:disabled)").validatebox("validate");
-var _33=t.find(".validatebox-invalid");
-_33.filter(":not(:disabled):first").focus();
-return _33.length==0;
+var _4a=t.find(".validatebox-invalid");
+_4a.filter(":not(:disabled):first").focus();
+return _4a.length==0;
 }
 return true;
 };
-function _34(_35,_36){
-$(_35).find(".validatebox-text:not(:disabled)").validatebox(_36?"disableValidation":"enableValidation");
+function _43(_4b,_4c){
+var _4d=$.data(_4b,"form").options;
+_4d.novalidate=_4c;
+$(_4b).find(".validatebox-text:not(:disabled)").validatebox(_4c?"disableValidation":"enableValidation");
 };
-$.fn.form=function(_37,_38){
-if(typeof _37=="string"){
-return $.fn.form.methods[_37](this,_38);
+$.fn.form=function(_4e,_4f){
+if(typeof _4e=="string"){
+this.each(function(){
+_44(this);
+});
+return $.fn.form.methods[_4e](this,_4f);
 }
-_37=_37||{};
 return this.each(function(){
-if(!$.data(this,"form")){
-$.data(this,"form",{options:$.extend({},$.fn.form.defaults,_37)});
-}
-_2e(this);
+_44(this,_4e);
+_40(this);
 });
 };
-$.fn.form.methods={submit:function(jq,_39){
+$.fn.form.methods={options:function(jq){
+return $.data(jq[0],"form").options;
+},submit:function(jq,_50){
 return jq.each(function(){
-var _3a=$.extend({},$.fn.form.defaults,$.data(this,"form")?$.data(this,"form").options:{},_39||{});
-_1(this,_3a);
+_1(this,_50);
 });
-},load:function(jq,_3b){
+},load:function(jq,_51){
 return jq.each(function(){
-_f(this,_3b);
+_20(this,_51);
 });
 },clear:function(jq){
 return jq.each(function(){
-_23(this);
+_32(this);
 });
 },reset:function(jq){
 return jq.each(function(){
-_2a(this);
+_3a(this);
 });
 },validate:function(jq){
-return _29(jq[0]);
+return _48(jq[0]);
 },disableValidation:function(jq){
 return jq.each(function(){
-_34(this,true);
+_43(this,true);
 });
 },enableValidation:function(jq){
 return jq.each(function(){
-_34(this,false);
+_43(this,false);
+});
+},resetValidation:function(jq){
+return jq.each(function(){
+$(this).find(".validatebox-text:not(:disabled)").validatebox("resetValidation");
+});
+},resetDirty:function(jq){
+return jq.each(function(){
+$(this).form("options").dirtyFields=[];
 });
 }};
-$.fn.form.defaults={url:null,onSubmit:function(_3c){
+$.fn.form.parseOptions=function(_52){
+var t=$(_52);
+return $.extend({},$.parser.parseOptions(_52,[{ajax:"boolean",dirty:"boolean"}]),{url:(t.attr("action")?t.attr("action"):undefined)});
+};
+$.fn.form.defaults={fieldTypes:["combobox","combotree","combogrid","combotreegrid","datetimebox","datebox","combo","datetimespinner","timespinner","numberspinner","spinner","slider","searchbox","numberbox","passwordbox","filebox","textbox","switchbutton"],novalidate:false,ajax:true,iframe:true,dirty:false,dirtyFields:[],url:null,queryParams:{},onSubmit:function(_53){
 return $(this).form("validate");
-},success:function(_3d){
-},onBeforeLoad:function(_3e){
-},onLoadSuccess:function(_3f){
+},onProgress:function(_54){
+},success:function(_55){
+},onBeforeLoad:function(_56){
+},onLoadSuccess:function(_57){
 },onLoadError:function(){
+},onChange:function(_58){
 }};
 })(jQuery);
 
