@@ -1,7 +1,7 @@
 $(function(){
      
     obj={
-        add:function(){
+        add_shift_id:function(){
             $('#save,#redo').show();
             if(this.editRow == undefined){
                 $('#box').datagrid('insertRow',{

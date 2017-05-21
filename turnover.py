@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 import json
 import mysql.connector
 import datetime
+import sys
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
@@ -38,7 +39,8 @@ def load_user(user_id):
 @app.route('/',methods=['GET', 'POST'])
 @login_required
 def index():
-    dept = session.get('emp_dept')
+    #dept = session.get('emp_dept')
+    dept=session.get('dept_sn')
     user_name = session.get('emp_name')
     return render_template('index.html',dept=dept,user_name=user_name)
 
@@ -49,7 +51,7 @@ def login():
     if user1:
         mydb=mysql.connector.Connect(database='dh_inf_manage',user='root',password='password')
         mycur=mydb.cursor(dictionary=True)
-        query_emp='select a.emp_sn,a.name,a.password,b.name as dept_name \
+        query_emp='select a.emp_sn,a.name,a.password,b.name as dept_name,b.dept_sn \
                   from dic_user a inner join dic_dept b \
                   where a.emp_dept_sn=b.dept_sn and a.emp_sn=%s'
         mycur.execute(query_emp%user1)
@@ -59,10 +61,12 @@ def login():
             emp_name=emp_result['name']
             hashpw=emp_result['password']
             emp_dept=emp_result['dept_name']
+            dept_sn=emp_result['dept_sn']
             if check_password_hash(hashpw,password):
                 session['emp_dept'] = emp_dept
+                session['dept_sn'] = dept_sn
                 session['emp_name'] = emp_name
-                session['emp_sn'] = emp_sn
+                session['emp_sn']=emp_sn
                 user=User()
                 login_user(user)
                 #redirect(url_for('index'))
@@ -76,8 +80,8 @@ def login():
 @app.route('/zy_shift_turnover',methods=['GET', 'POST'])
 @login_required
 def zy_shift_turnover():
-    dept = session.get('emp_dept')
-    user_name = session.get('emp_name')
+    #dept = session.get('emp_dept')
+    #user_name = session.get('emp_name')
     mydb=mysql.connector.Connect(database='dh_inf_manage',user='root',password='password')
     get_turnover_id_cur=mydb.cursor(dictionary=True)
     query_turnover_id='select shift_id as id,shift_id as text,shift_id as url from zy_shift_turnover'
@@ -125,6 +129,8 @@ def get_patient_list():
 def creat_shift_id():
     #user1=request.values.get('user')
     emp_sn = session.get('emp_sn')
+    dept = session.get('emp_dept')
+    user_name = session.get('emp_name')
     create_shift_id_db=mysql.connector.Connect(database='dh_inf_manage',user='root',password='password')
     create_shift_id_cur=create_shift_id_db.cursor(dictionary=True,)
     now_time=datetime.datetime.now()
@@ -141,6 +147,11 @@ def creat_shift_id():
     shift_id_json=json.dumps({'currt_id':shift_id_result},indent=4)
     
     return shift_id_json
+
+@app.route('/get_patient',methods=['GET','POST'])
+@login_required
+def get_patient():
+    pass
         
     
     

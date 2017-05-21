@@ -14,7 +14,9 @@
 <body class="easyui-layout">
     <div data-options="region:'north',title:'North Title',split:true,noheader:true" style="height: 60px;background: #666;">
         <div class="logo">东莞东华医院交接班管理系统</div>
-        <div class="logout">您好，{{user_name}}|<a href="#">退出</a></div>
+        <div class="logout">
+            您好，{{user_name}}|<a href="#">退出</a>
+        </div>
     </div>
     <div data-options="region:'south',title:'footer',split:true,noheader:true" style="height: 35px;line-height: 30px;text-align: center;">
         © 2017 东莞东华医院版权所有
@@ -28,7 +30,7 @@
         <div id="tabs">
             <div title="起始页" iconCls="icon-house" style="padding: 0 10px;display: block;">
                 <h1>欢迎来到医生交接班系统</h1>
-                <p><a id="add_new" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="obj.add();">新增交接班</a></p>
+                <p><a id="add_new" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="obj.add_shift_id();">新增交接班</a></p>
             </div>
 
         </div>
