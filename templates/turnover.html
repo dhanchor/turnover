@@ -2,33 +2,36 @@
 <table id="turnover{{id}}"></table>
 <div id="tb{{id}}" style="padding:5px;">
     <div style="margin-bottom: 5px">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="obj1.add_patient_detail();">添加</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="obj.edit();">修改</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-remove"plain="true" onclick="obj.remove();">删除</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-save"plain="true" style="display: none" id="save{{id}}" onclick="obj.save();">保存</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-redo"plain="true" style="display: none" id="redo{{id}}" onclick="obj.redo();">取消编辑</a>
+        <a href="#" id="add{{id}}" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="obj1.add_patient_detail();">添加</a>
+        <a href="#" id="edit{{id}}" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="obj1.edit_patient_detail();">修改</a>
+        <a href="#" id="delete{{id}}" class="easyui-linkbutton" iconCls="icon-remove"plain="true" onclick="obj1.delete_patient_detail();">删除</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-save"plain="true" style="display: none" id="save{{id}}" onclick="obj1.save();">保存</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-redo"plain="true" style="display: none" id="redo{{id}}" onclick="obj1.redo();">取消编辑</a>
     </div>
     <div>
-        <table>
+        <table border="1">
             <tr>
-                <td style="width: 200px">床号：<input class="easyui-textbox" id="bed_no{{id}}" data-options="disabled:true,buttonText:'查找',buttonAlign:'right'" style="width: 150px"></td>
-                <td style="width: 120px">住院号：<input class="easyui-textbox" id="inpatient_no{{id}}" data-options="disabled:true" style="width: 50px"></td>
-                <td style="width: 120px">病人状况：<input class="easyui-textbox" data-options="disabled:true" style="width: 50px"></td>
-                <td style="width: 120px">姓名：<label id="name{{id}}">{{emp_sn}}</label></td>
-                <td style="width: 120px">性别：<input class="easyui-textbox" id="sex{{id}}" data-options="disabled:true" style="width: 50px"></td>
-                <td style="width: 120px">年龄：<input class="easyui-textbox" id="age{{id}}" data-options="disabled:true" style="width: 50px"></td>
-                <td style="width: 300px">主要诊断：<input class="easyui-textbox" id="admiss_diag_str{{id}}" data-options="disabled:true" style="width: 150px"></td>
+                <td style="width: 150px">床号：<input class="easyui-textbox" id="bed_no{{id}}" data-options="disabled:true,buttonText:'查找',buttonAlign:'right'" style="width: 80px"></td>
+                <td style="width: 120px">住院号：<label id="inpatient_no{{id}}"></label></td>
+                <td style="width: 170px">患者ID：<label id="patient_id{{id}}"></label></td>
+                <td style="width: 190px">病人状况：<input class="easyui-combobox" id="patient_status{{id}}" data-options="disabled:true" style="width: 80px"></td>
+                <td style="width: 120px">姓名：<label id="name{{id}}"></label></td>
+                <td style="width: 120px">性别：<label id="sex{{id}}"></label></td>
+                <td style="width: 120px">年龄：<label id="age{{id}}"></label></td>
+                <td style="width: 300px">主要诊断：<label id="admiss_diag_str{{id}}"></label></td>
+                <td style="width: 180px">接班医生：<input class="easyui-textbox" id="succession_emp_sn{{id}}" data-options="disabled:true" style="width: 80px"></td>
+                <td style="width: 20px"><label id="admiss_times{{id}}" style="display: none"></label></td>
+                <td style="width: 20px"><label id="id{{id}}" "></label></td>
             </tr>
         </table>
     </div>
     <div>
         <table>
             <tr>
-                <td style="width: 400px">交班内容：<input class="easyui-textbox" id="shift_content{{id}}" data-options="multiline:true" value="This TextBox will allow the user to enter multiple lines of text.{{id}}" style="width:300px;height:100px"></td>
-                <td style="width: 400px">重点关注内容：<input class="easyui-textbox" id="focus{{id}}" data-options="multiline:true" value="This TextBox will allow the user to enter multiple lines of text.{{id}}" style="width:300px;height:100px"></td>
+                <td style="width: 400px">交班内容：<input class="easyui-textbox" id="shift_content{{id}}" data-options="multiline:true,disabled:true" style="width:300px;height:100px"></td>
+                <td style="width: 400px">重点关注内容：<input class="easyui-textbox" id="focus{{id}}" data-options="multiline:true,disabled:true" style="width:300px;height:100px"></td>
             </tr>
-        </table>
-        
+        </table>    
     </div>
 </div>
 
@@ -41,19 +44,134 @@ $(function(){
         add_patient_detail:function(){
             if(this.add_patient_flag==undefined){
                 $('#save{{id}},#redo{{id}}').show();
+                $('#edit{{id}},#delete{{id}},#save{{id}}').linkbutton('disable');
                 $('#bed_no{{id}}').textbox('enable');
+                $('#bed_no{{id}},#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('clear');
+                $('#id{{id}},#inpatient_no{{id}},#patient_id{{id}},#name{{id}},#age{{id}},#sex{{id}},#admiss_diag_str{{id}},#admiss_times{{id}}').text('');
                 this.add_patient_flag=1;
             }
             else{
                 alert('正在添加患者信息。');
             }
-        },      
+        },
+        
+        edit_patient_detail:function(){
+            if(this.add_patient_flag==undefined){
+                $('#save{{id}},#redo{{id}}').show();
+                $('#add{{id}}').linkbutton('disable');
+                $('#shift_content{{id}},#focus{{id}},#succession_emp_sn{{id}}').textbox('enable');
+                $('#patient_status{{id}}').combobox('enable');
+                this.add_patient_flag=2;
+            }else{
+                alert('正在编辑患者交接班信息！');
+            }
+            
+        },
+        
+        delete_patient_detail:function(){
+            var row=$('#turnover{{id}}').datagrid('getSelected');
+            if ($('#id{{id}}').text()==row.id){
+                $.ajax({
+                    url:'/delete_patient',
+                    type:'post',
+                    data:{
+                        id:$.trim($('#id{{id}}').text()),
+                    },
+                    success:function(response){
+                        if (response==1){
+                            $.messager.show({
+                                title:'提示',
+                                msg:'已删除患者交班记录。',
+                                showType:'fade',
+                                style:{
+                                right:'',
+                                bottom:''
+                                }
+                            });
+                        }
+                    },
+                });
+            }
+            else{
+                alert('所选择的记录与工作区中要删除的记录不相符，请核对！！！');
+            }
+        }, 
+        
+        save:function(){
+            if (this.add_patient_flag==1){
+                $.ajax({
+                    url:'/save_patient',
+                    type:'post',
+                    data:{
+                        bedno:$('#bed_no{{id}}').textbox('getText'),
+                        inpatientno:$('#inpatient_no{{id}}').text(),
+                        patientid:$('#patient_id{{id}}').text(),
+                        patientstatus:$('#patient_status{{id}}').combobox('getText'),
+                        name:$('#name{{id}}').text(),
+                        sex:$('#sex{{id}}').text(),
+                        age:$('#age{{id}}').text(),
+                        admiss_diag_str:$('#admiss_diag_str{{id}}').text(),
+                        admiss_times:$('#admiss_times{{id}}').text(),
+                        shift_content:$('#shift_content{{id}}').textbox('getText'),
+                        focus:$('#focus{{id}}').textbox('getText'),
+                        succession_emp_sn:$('#succession_emp_sn{{id}}').textbox('getText')
+                    },
+                    success:function(response){
+                        if(response=='1'){
+                            $('#edit{{id}},#delete{{id}}').linkbutton('enable');
+                            $('#save{{id}},#redo{{id}}').hide();
+                            $('#bed_no{{id}},#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('clear');
+                            $('#id{{id}},#inpatient_no{{id}},#patient_id{{id}},#name{{id}},#age{{id}},#sex{{id}},#admiss_diag_str{{id}},#admiss_times{{id}}').text('');
+                            $('#patient_status{{id}}').combobox('clear');
+                            $('#patient_status{{id}}').combobox('disable');
+                            $('#turnover{{id}}').datagrid('load');
+                            obj1.add_patient_flag=undefined;
+                        }    
+                    },
+                });
+            }else if(this.add_patient_flag==2){
+                $.ajax({
+                    url:'/edit_patient',
+                    type:'post',
+                    data:{
+                        id:$('#id{{id}}').text(),
+                        patientstatus:$('#patient_status{{id}}').combobox('getText'),
+                        shift_content:$('#shift_content{{id}}').textbox('getText'),
+                        focus:$('#focus{{id}}').textbox('getText'),
+                        succession_emp_sn:$('#succession_emp_sn{{id}}').textbox('getText')
+                    },
+                    success:function(response){
+                        if(response=='1'){
+                            $('#edit{{id}},#delete{{id}}').linkbutton('enable');
+                            $('#save{{id}},#redo{{id}}').hide();
+                            $('#bed_no{{id}},#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('clear');
+                            $('#id{{id}},#inpatient_no{{id}},#patient_id{{id}},#name{{id}},#age{{id}},#sex{{id}},#admiss_diag_str{{id}},#admiss_times{{id}}').text('');
+                            $('#patient_status{{id}}').combobox('clear');
+                            $('#patient_status{{id}}').combobox('disable');
+                            $('#turnover{{id}}').datagrid('load');
+                            obj1.add_patient_flag=undefined;
+                        }    
+                    },
+                });
+            }    
+        },
+        
+        redo:function(){
+            this.add_patient_flag=undefined;
+            $('#save{{id}},#redo{{id}}').hide();
+            $('#add{{id}},#edit{{id}},#delete{{id}},#save{{id}}').linkbutton('enable');
+            $('#bed_no{{id}}').textbox('disable');
+            $('#bed_no{{id}},#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('clear');
+            $('#id{{id}},#inpatient_no{{id}},#patient_id{{id}},#name{{id}},#age{{id}},#sex{{id}},#admiss_diag_str{{id}},#admiss_times{{id}}').text('');
+            $('#patient_status{{id}}').combobox('clear');
+            $('#patient_status{{id}}').combobox('disable');
+            $('#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('disable');
+        },
     };
     
     $('#bed_no{{id}}').textbox({
         onClickButton(){
                     get_patient($('#bed_no{{id}}').textbox('getText'));
-                    //alert($('#bed_no{{id}}').textbox('getText'));
         },
     });
     
@@ -63,9 +181,45 @@ $(function(){
             type:'post',
             data:{
                 bedno:$('#bed_no{{id}}').textbox('getText'),
-            },   
+            },
+            dataType:'json',
+            success:function(response){
+                if (response==0)
+                {
+                    $.messager.show({
+                        title:'提示',
+                        msg:'此床位没有找到患者，请核对床位信息！',
+                        showType:'fade',
+                        style:{
+                            right:'',
+                            bottom:''
+                        }
+                    });
+                }else{
+                //console.log(response);
+                $('#bed_no{{id}}').textbox('disable');
+                $('#bed_no{{id}}').textbox('setText',response[0].bed_no);
+                $('#inpatient_no{{id}}').text(response[0].inpatient_no);
+                $('#patient_id{{id}}').text(response[0].patient_id);
+                $('#name{{id}}').text(response[0].name);
+                $('#sex{{id}}').text(response[0].sex);
+                $('#age{{id}}').text(response[0].age);
+                $('#admiss_diag_str{{id}}').text(response[0].admiss_diag_str);
+                $('#admiss_times{{id}}').text(response[0].admiss_times);
+                $('#patient_status{{id}}').combobox('enable');
+                $('#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('enable');
+                $('#save{{id}}').linkbutton('enable');
+                }
+                
+            }
         })
     };
+    
+    $('#patient_status{{id}}').combobox({
+        url:'get_patient_status',
+        valueField:'id',
+        textField:'patient_status'
+    });
     
     $('#turnover{{id}}').datagrid({
         url:'/get_patient_list',
@@ -74,6 +228,7 @@ $(function(){
         striped : true,
         rownumbers : true,
         border : false,
+        singleSelect:true,
         pagination : true,
         pageSize : 20,
         pageList : [10, 20, 30, 40, 50],
@@ -81,24 +236,29 @@ $(function(){
         toolbar:'#tb{{id}}',
         columns:[[
             {
+                field:'id',
+                title:'id',
+                width:15,
+            },
+            {
                 field:'bed_no',
                 title:'床号',
-                width:20,
+                width:15,
             },
             {
                 field:'name',
                 title:'姓名',
-                width:30,
+                width:20,
             },
             {
                 field:'sex',
                 title:'性别',
-                width:20,
+                width:10,
             },
             {
                 field:'age',
                 title:'年龄',
-                width:20,
+                width:10,
             },
             {
                 field:'inpatient_no',
@@ -106,9 +266,20 @@ $(function(){
                 width:20,
             },
             {
+                field:'patient_id',
+                title:'住院ID',
+                width:20,
+                
+            },
+            {
+                field:'patient_status',
+                title:'病人状况',
+                width:20,
+            },
+            {
                 field:'admiss_diag_str',
                 title:'主要诊断',
-                width:100,
+                width:50,
             },
             {
                 field:'shift_content',
@@ -119,18 +290,36 @@ $(function(){
                 field:'focus',
                 title:'重点关注内容',
                 width:100,
-            },  
+            },
+            {
+                field:'succession_emp_sn',
+                title:'接班医生',
+                width:20,
+            },
+            {
+                field:'admiss_times',
+                title:'住院次数',
+                width:10,
+            },     
         ]],
         onDblClickRow:function(index,row){
-            $('#bed_no{{id}}').textbox('setText',row.bed_no);
-            $('#inpatient_no{{id}}').textbox('setText',row.inpatient_no);
-            $('#name{{id}}').text(row.name);
-            $('#sex{{id}}').textbox('setText',row.sex);
-            $('#age{{id}}').textbox('setText',row.age);
-            $('#admiss_diag_str{{id}}').textbox('setText',row.admiss_diag_str);
-            $('#shift_content{{id}}').textbox('setText',row.shift_content);
-            $('#focus{{id}}').textbox('setText',row.focus);
-            alert(row.shift_content);
+            if (obj1.add_patient_flag==1){
+                alert('正在新增病人信息...');
+            }else{
+                $('#id{{id}}').text(row.id);
+                $('#bed_no{{id}}').textbox('setText',row.bed_no);
+                $('#inpatient_no{{id}}').text(row.inpatient_no);
+                $('#patient_id{{id}}').text(row.patient_id);
+                $('#patient_status{{id}}').combobox('setText',row.patient_status);
+                $('#name{{id}}').text(row.name);
+                $('#sex{{id}}').text(row.sex);
+                $('#age{{id}}').text(row.age);
+                $('#admiss_diag_str{{id}}').text(row.admiss_diag_str);
+                $('#succession_emp_sn{{id}}').textbox('setText',row.succession_emp_sn);
+                $('#shift_content{{id}}').textbox('setText',row.shift_content);
+                $('#focus{{id}}').textbox('setText',row.focus);
+                //alert(row.shift_content);
+            }
         },
     });
 });

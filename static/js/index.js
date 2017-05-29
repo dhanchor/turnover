@@ -2,20 +2,11 @@ $(function(){
      
     obj={
         add_shift_id:function(){
-            $('#save,#redo').show();
-            if(this.editRow == undefined){
-                $('#box').datagrid('insertRow',{
-                    index:0,
-                    row:{      
-                    },
-                });
-            }
-            var turnover_id=1
             $.ajax({
                     type:'post',
                     url:'/creat_shift_id',
                     data:{
-                        id:turnover_id,
+                        
                     },
                     success:function(data){
                         if(data){
@@ -33,29 +24,11 @@ $(function(){
         
     };
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+       
     $('#nav').tree({
         url:'/zy_shift_turnover',
         line:true,
-        onLoadSuccess:function(node,date){
+        onLoadSuccess:function(node,data){
             if(data){
                 $(data).each(function(index,value){
                     if(this.state=='closed'){
