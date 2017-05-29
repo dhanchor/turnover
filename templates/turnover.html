@@ -9,19 +9,23 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-redo"plain="true" style="display: none" id="redo{{id}}" onclick="obj1.redo();">取消编辑</a>
     </div>
     <div>
-        <table border="1">
+        <table cellpadding="5">
             <tr>
                 <td style="width: 150px">床号：<input class="easyui-textbox" id="bed_no{{id}}" data-options="disabled:true,buttonText:'查找',buttonAlign:'right'" style="width: 80px"></td>
-                <td style="width: 120px">住院号：<label id="inpatient_no{{id}}"></label></td>
-                <td style="width: 170px">患者ID：<label id="patient_id{{id}}"></label></td>
                 <td style="width: 190px">病人状况：<input class="easyui-combobox" id="patient_status{{id}}" data-options="disabled:true" style="width: 80px"></td>
-                <td style="width: 120px">姓名：<label id="name{{id}}"></label></td>
-                <td style="width: 120px">性别：<label id="sex{{id}}"></label></td>
-                <td style="width: 120px">年龄：<label id="age{{id}}"></label></td>
-                <td style="width: 300px">主要诊断：<label id="admiss_diag_str{{id}}"></label></td>
                 <td style="width: 180px">接班医生：<input class="easyui-textbox" id="succession_emp_sn{{id}}" data-options="disabled:true" style="width: 80px"></td>
                 <td style="width: 20px"><label id="admiss_times{{id}}" style="display: none"></label></td>
                 <td style="width: 20px"><label id="id{{id}}" "></label></td>
+            </tr>
+                
+            <tr>   
+                <td style="width: 120px">住院号：<label id="inpatient_no{{id}}" style="color: red;font-size:15px"></label></td>
+                <td style="width: 170px">患者ID：<label id="patient_id{{id}}" style="color: red;font-size:15px"></label></td>
+                <td style="width: 120px">姓名：<label id="name{{id}}" style="color: red;font-size:15px"></label></td>
+                <td style="width: 120px">性别：<label id="sex{{id}}"></label></td>
+                <td style="width: 120px">年龄：<label id="age{{id}}"></label></td>
+                <td style="width: 300px">主要诊断：<label id="admiss_diag_str{{id}}" style="color: red;font-size:15px"></label></td>
+                
             </tr>
         </table>
     </div>
@@ -79,6 +83,7 @@ $(function(){
                     },
                     success:function(response){
                         if (response==1){
+                            $('#turnover{{id}}').datagrid('load');
                             $.messager.show({
                                 title:'提示',
                                 msg:'已删除患者交班记录。',
@@ -121,6 +126,7 @@ $(function(){
                             $('#edit{{id}},#delete{{id}}').linkbutton('enable');
                             $('#save{{id}},#redo{{id}}').hide();
                             $('#bed_no{{id}},#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('clear');
+                            $('#bed_no{{id}},#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('disable');
                             $('#id{{id}},#inpatient_no{{id}},#patient_id{{id}},#name{{id}},#age{{id}},#sex{{id}},#admiss_diag_str{{id}},#admiss_times{{id}}').text('');
                             $('#patient_status{{id}}').combobox('clear');
                             $('#patient_status{{id}}').combobox('disable');

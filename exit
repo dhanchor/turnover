@@ -1,0 +1,52 @@
+[1mdiff --git a/templates/turnover.html b/templates/turnover.html[m
+[1mindex 1e40246..f2acc05 100644[m
+[1m--- a/templates/turnover.html[m
+[1m+++ b/templates/turnover.html[m
+[36m@@ -9,20 +9,24 @@[m
+         <a href="#" class="easyui-linkbutton" iconCls="icon-redo"plain="true" style="display: none" id="redo{{id}}" onclick="obj1.redo();">取消编辑</a>[m
+     </div>[m
+     <div>[m
+[31m-        <table border="1">[m
+[32m+[m[32m        <table cellpadding="5">[m
+             <tr>[m
+                 <td style="width: 150px">床号：<input class="easyui-textbox" id="bed_no{{id}}" data-options="disabled:true,buttonText:'查找',buttonAlign:'right'" style="width: 80px"></td>[m
+[31m-                <td style="width: 120px">住院号：<label id="inpatient_no{{id}}"></label></td>[m
+[31m-                <td style="width: 170px">患者ID：<label id="patient_id{{id}}"></label></td>[m
+                 <td style="width: 190px">病人状况：<input class="easyui-combobox" id="patient_status{{id}}" data-options="disabled:true" style="width: 80px"></td>[m
+[31m-                <td style="width: 120px">姓名：<label id="name{{id}}"></label></td>[m
+[31m-                <td style="width: 120px">性别：<label id="sex{{id}}"></label></td>[m
+[31m-                <td style="width: 120px">年龄：<label id="age{{id}}"></label></td>[m
+[31m-                <td style="width: 300px">主要诊断：<label id="admiss_diag_str{{id}}"></label></td>[m
+                 <td style="width: 180px">接班医生：<input class="easyui-textbox" id="succession_emp_sn{{id}}" data-options="disabled:true" style="width: 80px"></td>[m
+                 <td style="width: 20px"><label id="admiss_times{{id}}" style="display: none"></label></td>[m
+                 <td style="width: 20px"><label id="id{{id}}" "></label></td>[m
+             </tr>[m
+[32m+[m[41m                [m
+[32m+[m[32m            <tr>[m[41m   [m
+[32m+[m[32m                <td style="width: 120px">住院号：<label id="inpatient_no{{id}}" style="color: red;font-size:15px"></label></td>[m
+[32m+[m[32m                <td style="width: 170px">患者ID：<label id="patient_id{{id}}" style="color: red;font-size:15px"></label></td>[m
+[32m+[m[32m                <td style="width: 120px">姓名：<label id="name{{id}}" style="color: red;font-size:15px"></label></td>[m
+[32m+[m[32m                <td style="width: 120px">性别：<label id="sex{{id}}"></label></td>[m
+[32m+[m[32m                <td style="width: 120px">年龄：<label id="age{{id}}"></label></td>[m
+[32m+[m[32m                <td style="width: 300px">主要诊断：<label id="admiss_diag_str{{id}}" style="color: red;font-size:15px"></label></td>[m
+[32m+[m[41m                [m
+[32m+[m[32m            </tr>[m
+         </table>[m
+     </div>[m
+     <div>[m
+[36m@@ -79,6 +83,7 @@[m [m$(function(){[m
+                     },[m
+                     success:function(response){[m
+                         if (response==1){[m
+[32m+[m[32m                            $('#turnover{{id}}').datagrid('load');[m
+                             $.messager.show({[m
+                                 title:'提示',[m
+                                 msg:'已删除患者交班记录。',[m
+[36m@@ -121,6 +126,7 @@[m [m$(function(){[m
+                             $('#edit{{id}},#delete{{id}}').linkbutton('enable');[m
+                             $('#save{{id}},#redo{{id}}').hide();[m
+                             $('#bed_no{{id}},#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('clear');[m
+[32m+[m[32m                            $('#bed_no{{id}},#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('disable');[m
+                             $('#id{{id}},#inpatient_no{{id}},#patient_id{{id}},#name{{id}},#age{{id}},#sex{{id}},#admiss_diag_str{{id}},#admiss_times{{id}}').text('');[m
+                             $('#patient_status{{id}}').combobox('clear');[m
+                             $('#patient_status{{id}}').combobox('disable');[m
