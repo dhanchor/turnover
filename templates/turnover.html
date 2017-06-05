@@ -1,48 +1,4 @@
-
-<table id="turnover{{id}}"></table>
-<div id="tb{{id}}" style="padding:5px;">
-    <div style="margin-bottom: 5px">
-        <a href="#" id="add{{id}}" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="obj1.add_patient_detail();">添加</a>
-        <a href="#" id="edit{{id}}" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="obj1.edit_patient_detail();">修改</a>
-        <a href="#" id="delete{{id}}" class="easyui-linkbutton" iconCls="icon-remove"plain="true" onclick="obj1.delete_patient_detail();">删除</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-save"plain="true" style="display: none" id="save{{id}}" onclick="obj1.save();">保存</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-redo"plain="true" style="display: none" id="redo{{id}}" onclick="obj1.redo();">取消编辑</a>
-    </div>
-    <div>
-        <table cellpadding="5">
-            <tr>
-                <td style="width: 150px">床号：<input class="easyui-textbox" id="bed_no{{id}}" data-options="disabled:true,buttonText:'查找',buttonAlign:'right'" style="width: 80px"></td>
-                <td style="width: 190px">病人状况：<input class="easyui-combobox" id="patient_status{{id}}" data-options="disabled:true" style="width: 80px"></td>
-                <td style="width: 180px">接班医生：<input class="easyui-textbox" id="succession_emp_sn{{id}}" data-options="disabled:true" style="width: 80px"></td>
-                <td style="width: 20px"><label id="admiss_times{{id}}" style="display: none"></label></td>
-                <td style="width: 20px"><label id="id{{id}}" "></label></td>
-            </tr>
-                
-            <tr>   
-                <td style="width: 120px">住院号：<label id="inpatient_no{{id}}" style="color: red;font-size:15px"></label></td>
-                <td style="width: 170px">患者ID：<label id="patient_id{{id}}" style="color: red;font-size:15px"></label></td>
-                <td style="width: 120px">姓名：<label id="name{{id}}" style="color: red;font-size:15px"></label></td>
-                <td style="width: 120px">性别：<label id="sex{{id}}"></label></td>
-                <td style="width: 120px">年龄：<label id="age{{id}}"></label></td>
-                <td style="width: 300px">主要诊断：<label id="admiss_diag_str{{id}}" style="color: red;font-size:15px"></label></td>
-                
-            </tr>
-        </table>
-    </div>
-    <div>
-        <table>
-            <tr>
-                <td style="width: 400px">交班内容：<input class="easyui-textbox" id="shift_content{{id}}" data-options="multiline:true,disabled:true" style="width:300px;height:100px"></td>
-                <td style="width: 400px">重点关注内容：<input class="easyui-textbox" id="focus{{id}}" data-options="multiline:true,disabled:true" style="width:300px;height:100px"></td>
-            </tr>
-        </table>    
-    </div>
-</div>
-
-<script>
-
-$(function(){
-    
+<script>   
     obj1={
         add_patient_flag:undefined,
         add_patient_detail:function(){
@@ -151,6 +107,7 @@ $(function(){
                             $('#edit{{id}},#delete{{id}}').linkbutton('enable');
                             $('#save{{id}},#redo{{id}}').hide();
                             $('#bed_no{{id}},#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('clear');
+                            $('#bed_no{{id}},#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('disable');
                             $('#id{{id}},#inpatient_no{{id}},#patient_id{{id}},#name{{id}},#age{{id}},#sex{{id}},#admiss_diag_str{{id}},#admiss_times{{id}}').text('');
                             $('#patient_status{{id}}').combobox('clear');
                             $('#patient_status{{id}}').combobox('disable');
@@ -174,6 +131,52 @@ $(function(){
             $('#succession_emp_sn{{id}},#shift_content{{id}},#focus{{id}}').textbox('disable');
         },
     };
+</script>
+<table id="turnover{{id}}"></table>
+<div id="tb{{id}}" style="padding:5px;">
+    <div style="margin-bottom: 5px">
+        <a href="#" id="add{{id}}" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="obj1.add_patient_detail();">添加</a>
+        <a href="#" id="edit{{id}}" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="obj1.edit_patient_detail();">修改</a>
+        <a href="#" id="delete{{id}}" class="easyui-linkbutton" iconCls="icon-remove"plain="true" onclick="obj1.delete_patient_detail();">删除</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-save"plain="true" style="display: none" id="save{{id}}" onclick="obj1.save();">保存</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-redo"plain="true" style="display: none" id="redo{{id}}" onclick="obj1.redo();">取消编辑</a>
+    </div>
+    <div>
+        <table cellpadding="5">
+            <tr>
+                <td style="width: 150px">床号：<input class="easyui-textbox" id="bed_no{{id}}" data-options="disabled:true,buttonText:'查找',buttonAlign:'right'" style="width: 80px"></td>
+                <td style="width: 190px">病人状况：<input class="easyui-combobox" id="patient_status{{id}}" data-options="disabled:true" style="width: 80px"></td>
+                <td style="width: 180px">接班医生：<input class="easyui-textbox" id="succession_emp_sn{{id}}" data-options="disabled:true" style="width: 80px"></td>
+                <td style="width: 20px"><label id="admiss_times{{id}}" style="display: none"></label></td>
+                <td style="width: 20px"><label id="id{{id}}" "></label></td>
+            </tr>
+                
+            <tr>   
+                <td style="width: 120px">住院号：<label id="inpatient_no{{id}}" style="color: red;font-size:15px"></label></td>
+                <td style="width: 170px">患者ID：<label id="patient_id{{id}}" style="color: red;font-size:15px"></label></td>
+                <td style="width: 120px">姓名：<label id="name{{id}}" style="color: red;font-size:15px"></label></td>
+                <td style="width: 120px">性别：<label id="sex{{id}}"></label></td>
+                <td style="width: 120px">年龄：<label id="age{{id}}"></label></td>
+                <td style="width: 300px">主要诊断：<label id="admiss_diag_str{{id}}" style="color: red;font-size:15px"></label></td>
+                
+            </tr>
+        </table>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td style="width: 400px">交班内容：<input class="easyui-textbox" id="shift_content{{id}}" data-options="multiline:true,disabled:true" style="width:300px;height:100px"></td>
+                <td style="width: 400px">重点关注内容：<input class="easyui-textbox" id="focus{{id}}" data-options="multiline:true,disabled:true" style="width:300px;height:100px"></td>
+            </tr>
+        </table>    
+    </div>
+</div>
+
+<script>
+
+$(function(){
+    
+    
     
     $('#bed_no{{id}}').textbox({
         onClickButton(){

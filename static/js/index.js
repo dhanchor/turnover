@@ -12,7 +12,7 @@ $(function(){
                         if(data){
                                     $('#nav').tree('reload');
                                     $('#tabs').tabs('add',{
-                                        title:date,
+                                        title:data,
                                         closable:true,
                                         href:'/turnover/'+node.text,
                                     });
